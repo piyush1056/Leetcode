@@ -53,6 +53,11 @@ A lot of features and functionalities to be added in future.
 - Developed POST /problems/:id/submit endpoint to handle batch submissions against all associated test cases.
 - Added robust error handling and retry logic to handle network timeouts or API failures.
 
+## DAY05
+- Implemented admin-only functionality for updating and deleting problems, secured via admin middleware .
+- Added routes for users to view individual problems and browse the full problem list.
+- Ensured clear separation between admin and user access, maintaining security and scalability.
+- Continued refining backend structure for modularity and clarity
 
 
 

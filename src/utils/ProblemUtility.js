@@ -16,8 +16,10 @@ const getLanguageById = (lang)=>{
 
 const submitBatch = async (submissions)=>{
 
-//base64_encoded :make false ,bcz data is in js obj
-
+  //checkppoints
+    if (!Array.isArray(submissions) || submissions.length === 0) {
+    throw new Error('submissions must be a non-empty array');
+  }
 
   const options = {
   method: 'POST',
@@ -26,13 +28,14 @@ const submitBatch = async (submissions)=>{
     base64_encoded: 'false'
   },
   headers: {
-    'x-rapidapi-key': '53992d5f44msh08fb3903f4a6f1fp1b5904jsn1419a137a299',
+    'x-rapidapi-key':  process.env.RAPIDAPI_KEY,
     'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
     'Content-Type': 'application/json'
   },
   data: {
     submissions     
-  }
+  },
+   timeout: 15000,
 };
 
 async function fetchData() {
@@ -40,7 +43,8 @@ async function fetchData() {
     const response = await axios.request(options);
     return response.data;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
+    throw error;
   }
 }
 
@@ -52,9 +56,14 @@ async function fetchData() {
 const waiting = (timer) => new Promise((resolve) => setTimeout(resolve, timer));
 
 
-// ["db54881d-bcf5-4c7b-a2e3-d33fe7e25de7","ecc52a9b-ea80-4a00-ad50-4ab6cc3bb2a1","1b35ec3b-5776-48ef-b646-d5522bdeb2cc"]
+
 
 const submitToken = async(resultToken)=>{
+
+   if (!Array.isArray(resultToken) || resultToken.length === 0) {
+    throw new Error('resultToken must be a non-empty array of tokens');
+  }
+
 
 const options = {
   method: 'GET',
@@ -65,7 +74,7 @@ const options = {
     fields: '*'
   },
   headers: {
-    'x-rapidapi-key': '53992d5f44msh08fb3903f4a6f1fp1b5904jsn1419a137a299',
+    'x-rapidapi-key': process.env.RAPIDAPI_KEY,
     'x-rapidapi-host': 'judge0-ce.p.rapidapi.com'
   }
 };
@@ -75,26 +84,51 @@ async function fetchData() {
     const response = await axios.request(options);
     return response.data;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
+    throw error;
   }
 }
 
 
- while(true){
+//  while(true){
 
- const result =  await fetchData(); //we got the final result as array of object form
+//  const result =  await fetchData(); //we got the final result as array of object form
 
 
-  const IsResultObtained =  result.submissions.every((r)=>r.status_id>2);
+//   const IsResultObtained =  result.submissions.every((r)=>r.status_id>2);
 
-  if(IsResultObtained)
-    return result.submissions;//if true ,returns ,and loop breaks
+//   if(IsResultObtained)
+//     return result.submissions;//if true ,returns ,and loop breaks
 
 
   
-  await waiting(1000);//wait for 1sec
+//   await waiting(1000);//wait for 1sec
 
+// }
+const maxRetries = 30;
+const delay = 1000;
+
+for (let attempt = 0; attempt < maxRetries; attempt++) {
+  try {
+    const result = await fetchData();
+
+   if (!result || !Array.isArray(result.submissions)) {
+    throw new Error('Invalid response from Judge0');
+  }
+
+    const allDone = result.submissions.every(sub => sub.status_id > 2);
+   
+    if (allDone)
+       return result.submissions;
+
+  } catch (err) {
+    // transient error — ignore and retry
+  }
+
+  await waiting(delay);
 }
+
+throw new Error('Polling timed out after 30 seconds');
 
 
 }
