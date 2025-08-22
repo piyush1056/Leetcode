@@ -1,3 +1,4 @@
+
 # MERN Major Project - Leetcode like coding platform
 -A full-stack MERN application where users can register, solve coding problems, and admins can manage problems & users.
 A lot of features and functionalities to be added in future.
@@ -35,6 +36,25 @@ A lot of features and functionalities to be added in future.
 - Seeded the very first admin directly in the database to kick things off  
 - Included the user’s role inside the JWT payload for easy permission checks  
 - Defined the Problem model with fields for tags, title, description, examples, test cases, and creator ID.
+
+## DAY04
+- Reviewed and validated reference solution code before inserting problems into the database
+- Integrated Judge0 API for automated code execution and evaluation:
+- Chose Axios over Fetch API for its built-in interceptors, automatic JSON parsing, and enhanced error handling.
+- Implemented a two-step submission workflow:
+
+     - POST user code and test cases to Judge0; receive submission tokens for each test case
+     - Poll GET endpoint with tokens to retrieve execution results
+
+- Interpreted Judge0 status codes:
+- Status ID = 3 → Accepted
+- Status ID < 3 → Pending
+- Status ID > 3 → Rejected or Error
+- Developed POST /problems/:id/submit endpoint to handle batch submissions against all associated test cases.
+- Added robust error handling and retry logic to handle network timeouts or API failures.
+
+
+
 
 
 # Upcoming Work

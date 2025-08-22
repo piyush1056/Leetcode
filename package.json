@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.11.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.1",
@@ -19,6 +20,5 @@
     "redis": "^5.8.1",
     "validator": "^13.15.15"
   },
-  "devDependencies": {},
   "description": ""
 }

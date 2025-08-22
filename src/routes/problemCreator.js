@@ -1,25 +1,25 @@
-const express = require("express");
-const problemRouter = express.Router();
+const express = require('express');
+const problemRouter =  express.Router();
+const adminMiddleware = require("../middleware/adminMiddleware")
+const createProblem = require("../controllers/userProblem");
 
 
-//create
-//fetch
-//update
-//delete
+// Create
+// fetch
+// update
+// delete 
 
-//admin access for first 3
-problemRouter.post("/create",problemCreate);
-
-problemRouter.patch("/:id",problemUpdate);
-
-problemRouter.delete("/:id",problemDelete);
+//only admins can access first three
+problemRouter.post("/create",adminMiddleware ,createProblem);
+// problemRouter.patch("/:id", updateProblem);
+// problemRouter.delete("/:id",deleteProblem);
 
 
+// problemRouter.get("/:id",getProblemById);
+// problemRouter.get("/", getAllProblem);
+// problemRouter.get("/user", solvedAllProblembyUser);
 
-problemRouter.get("/:id",problemFetch);
 
-problemRouter.get("/",getAllProblem);
-
-problemRouter.get("/user",solvedProblem);
+module.exports = problemRouter;
 
 
