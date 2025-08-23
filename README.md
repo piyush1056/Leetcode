@@ -61,6 +61,15 @@ A lot of features and functionalities to be added in future.
 
 
 
+## DAY06
+- created submission schema when user submits its code
+- Implemented submission workflow:
+- Fetched problem details and hidden test cases from DB.
+- Stored initial submission with pending status.
+- Sent code to Judge0 with hidden test cases, fetched results via tokens.
+- Processed response (test cases passed, runtime, memory, errors).
+- Updated submission in DB with final result and improved error handling.
+
 
 # Upcoming Work
 - AI-powered chatbot integration  
