@@ -3,6 +3,7 @@ const User = require("../models/user");
 const validate = require("../utils/validator")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Submission = require("../models/submission")
 
 //create all userAuth Route fucntions:
 
@@ -121,4 +122,24 @@ const adminRegister = async (req,res)=>
    }
 }
 
-module.exports = {register,login,logout,adminRegister};
+
+const deleteProfile = async(req,res)=>{
+  
+    try {
+    
+         const userId = req.result._id;
+         //userSchema delete
+         await User.findByIdAndDelete(userId); 
+
+         //Delete from submission too that user's all submission
+        await Submission.deleteMany({userId});
+
+      res.status(200).send("deleted Successfully");
+
+  }
+   catch (error) {
+       res.status(500).send("Internal Server Error");
+  }
+}
+
+module.exports = {register,login,logout,adminRegister,deleteProfile};

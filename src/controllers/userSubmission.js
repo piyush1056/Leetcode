@@ -2,9 +2,10 @@ const Problem = require("../models/problem")
 const Submission = require("../models/submission");
 const {getLanguageById,submitBatch,submitToken} = require("../utils/ProblemUtility")
 
-const submitCode = async(req , res)=>{
+const submitCode = async(req,res)=>{
  
     try {
+    
         const userId = req.result._id; //from user middleware
         const problemId = req.params.id;
 
@@ -55,7 +56,7 @@ const submitCode = async(req , res)=>{
         let testCasesPassed = 0;
         let runtime = 0;
         let memory = 0;
-        let status = "Accepted";
+        let status = "accepted";
         let errorMessage = null;
 
         for(const test of testResult)
@@ -90,6 +91,14 @@ const submitCode = async(req , res)=>{
 
         await submittedResult.save();   //or by findByIdandUpdate
 
+        //add problem id in problemSolved of user if unique
+         
+        if(!req.result.problemSolved.includes(problemId))
+        {
+            req.result.problemSolved.push(problemId);
+            await req.result.save();
+        }
+
         res.status(201).send(submittedResult);
 
 
@@ -104,4 +113,53 @@ const submitCode = async(req , res)=>{
     }
 }
 
-module.exports = submitCode;
+const runCode = async(req,res)=>
+{
+   try {
+    
+        const userId = req.result._id; 
+        const problemId = req.params.id;
+
+        const {code,language} = req.body;
+        
+        if(!userId || !code || !problemId || !language)
+            return res.status(400).send("some field missing");
+
+        const problem  = await Problem.findById(problemId);
+
+        if (!problem) {
+         return res.status(404).json({ error: "Problem not found" });
+        }
+ 
+       //submit code to judge0
+
+       const languageId = getLanguageById(language);
+
+
+        //only visible test cases
+       const submissions = problem.visibleTestCases.map((testcase)=>({
+            source_code:code,
+            language_id: languageId,
+            stdin: testcase.input,
+            expected_output: testcase.output
+        }));
+
+        const submitResult = await submitBatch(submissions);
+
+        const resultToken = submitResult.map((value)=> value.token);
+
+        const testResult = await submitToken(resultToken);
+
+    
+        res.status(201).send(testResult);
+
+    }
+    catch (err) {
+     
+        console.error("Error in submitCode:", err);
+        res.status(500).send("Internal Server Error");
+
+    }
+}
+
+module.exports ={submitCode,runCode};

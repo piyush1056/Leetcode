@@ -36,7 +36,11 @@ const UserSchema = new Schema({
         required:true
     },
     problemSolved:{
-        type:[String]  //sb question ke id rahegi array me
+        type:[{
+            type:Schema.Types.ObjectId,
+            ref:'problem'
+        }]  ,
+                    // all unique solved problem
     }
 },
  {

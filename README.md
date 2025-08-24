@@ -70,6 +70,15 @@ A lot of features and functionalities to be added in future.
 - Processed response (test cases passed, runtime, memory, errors).
 - Updated submission in DB with final result and improved error handling.
 
+## DAY07
+- Added problemSolved field in the user schema.
+- Updated the user submission function for better handling.
+- Used populate and optimized database calls.
+- Built an API to run code on visible test cases before final submission.
+- Added delete user functionality.
+- Created an API to fetch all submissions of a specific problem by a user.
+- Added a compound index (userId + problemId) in the submission schema for faster lookups and faster search.
+
 
 # Upcoming Work
 - AI-powered chatbot integration  

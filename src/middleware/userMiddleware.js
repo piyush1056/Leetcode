@@ -32,7 +32,7 @@ const userMiddleware= async (req,res,next)=>{
       if(isBlocked)
         throw new Error("Invalid token");
      
-     res.result=result;
+     req.result=result;
 
      next();
 

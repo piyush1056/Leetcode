@@ -1,5 +1,6 @@
 const {getLanguageById,submitBatch,submitToken} = require("../utils/ProblemUtility");
-const Problem = require("../models/problem")
+const Problem = require("../models/problem");
+const Submission = require("../models/submission");
 
 const createProblem = async (req,res)=>{
    
@@ -243,7 +244,43 @@ const getAllProblem = async(req,res)=>{
   }
 }
 
+const solvedAllProblembyUser = async(req,res)=>{
+  
+  try {
+      const user = req.result;
+      const ans = await user.populate({
+        path:"problemSolved",
+        select:"_id title tags difficulty "
+      })  
 
+      res.status(200).send(ans.problemSolved); //send only user problemSolved field
+     
+  }
+   catch (error) {
+    res.status(500).send("Server Error");
+  }
+}
 
-module.exports = {createProblem,updateProblem,deleteProblem,getProblemById , getAllProblem};
+const submittedProblem = async(req,res) => {
+   
+  try {
+    const userId = req.result._id;
+    const problemId = req.params.pid;
+
+    const ans  = await Submission.find({userId,problemId});
+
+    if(!ans.length)
+    {
+      return  res.status(200).send("No submission is present");
+    }
+
+     return res.status(200).send(ans);
+
+    
+  } 
+  catch (error) {
+     res.status(500).send("Internal server error")
+  }
+}
+module.exports = {createProblem,updateProblem,deleteProblem,getProblemById , getAllProblem,solvedAllProblembyUser,submittedProblem};
 
