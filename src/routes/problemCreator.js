@@ -3,6 +3,7 @@ const problemRouter =  express.Router();
 const adminMiddleware = require("../middleware/adminMiddleware")
 const {createProblem ,updateProblem, deleteProblem,getProblemById, getAllProblem,solvedAllProblembyUser,submittedProblem}= require("../controllers/userProblem");
 const userMiddleware = require("../middleware/userMiddleware");
+const createRateLimiter = require("../middleware/rateLimiterMiddleware");
 
 
 
@@ -12,15 +13,16 @@ const userMiddleware = require("../middleware/userMiddleware");
 // delete 
 
 //only admins can access first three
-problemRouter.post("/create",adminMiddleware ,createProblem);
-problemRouter.put("/update/:id", adminMiddleware ,updateProblem);
-problemRouter.delete("/:id",adminMiddleware ,deleteProblem);
+// Admin operations - bit strict
+problemRouter.post("/create", adminMiddleware, createRateLimiter(3600, 20), createProblem);
+problemRouter.put("/update/:id", adminMiddleware, createRateLimiter(3600, 30), updateProblem);
+problemRouter.delete("/:id", adminMiddleware, createRateLimiter(86400, 30), deleteProblem);
 
-
-problemRouter.get("/problemById/:id",userMiddleware,getProblemById);
-problemRouter.get("/getAllProblem",userMiddleware, getAllProblem);
-problemRouter.get("/problemSolvedbyUser", userMiddleware, solvedAllProblembyUser);
-problemRouter.get("/submittedProblem/:pid",userMiddleware,submittedProblem);
+// User read operations - moderate limits
+problemRouter.get("/problemById/:id", userMiddleware, createRateLimiter(60, 30), getProblemById);
+problemRouter.get("/getAllProblem", userMiddleware, createRateLimiter(60, 20), getAllProblem);
+problemRouter.get("/problemSolvedbyUser", userMiddleware, createRateLimiter(300, 10), solvedAllProblembyUser);
+problemRouter.get("/submittedProblem/:pid", userMiddleware, createRateLimiter(300, 15), submittedProblem);
 
 
 module.exports = problemRouter;

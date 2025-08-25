@@ -79,6 +79,20 @@ A lot of features and functionalities to be added in future.
 - Created an API to fetch all submissions of a specific problem by a user.
 - Added a compound index (userId + problemId) in the submission schema for faster lookups and faster search.
 
+## DAY08
+- Implemented Sliding Window Rate Limiting using Redis Sorted Sets
+- prevent API abuse, DDoS attack , brute-force attacks, and ensure fair resource usage
+- Algorithm Used: Custom sliding window implementation for accurate request tracking
+- use UserID for authenticated users, fall back to IP + User-Agent for anonymous users to handle shared networks
+- Protected Routes:
+    - Authentication: 5 login attempts per 15 minutes, 3 registrations per hour
+    - Admin Operations: 1 admin registration per day, 10 problem creations per hour
+    - Submissions: 10 code submissions per minute, 15 code runs per minute
+    - User Operations: 20-30 read requests per minute depending on endpoint
+    
+- Redis ZADD, ZREMRANGEBYSCORE, ZCARD, EXPIRE
+- remove old requests, count current window, add new entry, set key expiration
+
 
 # Upcoming Work
 - AI-powered chatbot integration  
