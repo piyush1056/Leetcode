@@ -11,17 +11,24 @@ A modern, responsive frontend for CodeClimb, a LeetCode-style coding platform bu
 
 # Day 02: Authentication Flow Setup
 -  Frontend (React + Redux)
--  Routing Setup (React Router):
-  - Added protected routes using Navigate based on authentication state.
-  - Redirects user to /signup if not authenticated.
-  - Redirects logged-in users away from /login & /signup to Homepage.
+-  Async Thunks:
+   - loginUser() - Handles user login with error handling
+   - registerUser() - Handles user registration
+   - checkAuth() - Validates user sessions on app load
+   - logoutUser() - Manages user logout process
+
+- Added protected routes using Navigate based on authentication state.
+
+- Smart Navigation:
+  - Authenticated users redirected away from login/signup
+  - Non-authenticated users protected from accessing home page
 
 - Login & Signup Pages:
   - Built responsive forms using Tailwind + DaisyUI card layout.
   - Implemented validation with react-hook-form + Zod.
   - Error handling for invalid email & weak passwords.
   - Integrated with Redux authSlice → dispatching loginUser / signupUser.
-  - On successful login/signup, users are auto-redirected to Homepage.
+
 
 - Authentication State:
   - On app load, checkAuth is dispatched to verify authentication status.
@@ -54,25 +61,31 @@ A modern, responsive frontend for CodeClimb, a LeetCode-style coding platform bu
 
 ```
 frontend/
-├── node_modules/       # Dependencies
-├── public/            # Static assets
-├── src/               # Source code
-│   ├── assets/        # Images, icons, etc.
-│   ├── pages/         # Page components
+├── node_modules/          # Dependencies
+├── public/               # Static assets
+├── src/                  # Source code
+│   ├── assets/           # Images, icons, etc.
+│   ├── pages/            # Page components
 │   │   ├── Homepage.jsx
 │   │   ├── Login.jsx
 │   │   └── Signup.jsx
-│   ├── App.css        # Main app styles
-│   ├── App.jsx        # Main app component
-│   ├── index.css      # Global styles
-│   └── main.jsx       # Application entry point
-├── .gitignore         # Git ignore rules
-├── eslint.config.js   # ESLint configuration
-├── index.html         # HTML template
-├── package-lock.json  # Dependency lock file
-├── package.json       # Project dependencies
-├── README.md          # Project documentation
-└── vite.config.js     # Vite configuration
+│   ├── store/            # Redux store setup
+│   │   └── store.js
+│   ├── utils/            # Utility functions
+│   │   └── axiosClient.js
+│   ├── App.css           # Main app styles
+│   ├── App.jsx           # Main app component
+│   ├── authSlice.js      # Redux slice for authentication
+│   ├── index.css         # Global styles
+│   └── main.jsx          # Application entry point
+├── .gitignore            # Git ignore rules
+├── eslint.config.js      # ESLint configuration
+├── index.html            # HTML template
+├── package-lock.json     # Dependency lock file
+├── package.json          # Project dependencies
+├── README.md             # Project documentation
+└── vite.config.js        # Vite configuration
+
 ```
 
 ## ⚡ Installation & Setup
