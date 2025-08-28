@@ -3,11 +3,33 @@ A modern, responsive frontend for CodeClimb, a LeetCode-style coding platform bu
 
 ## 🚀 Current Progress (Daily Updates)
 
-# Day 1: Project Setup & Foundation
+# Day 01: Project Setup & Foundation
 -  React app initialization with Vite
 -  Router setup (React Router DOM)
 -  Tailwind CSS + DaisyUI configuration
 -  Basic folder structure setup
+
+# Day 02: Authentication Flow Setup
+-  Frontend (React + Redux)
+-  Routing Setup (React Router):
+  - Added protected routes using Navigate based on authentication state.
+  - Redirects user to /signup if not authenticated.
+  - Redirects logged-in users away from /login & /signup to Homepage.
+
+- Login & Signup Pages:
+  - Built responsive forms using Tailwind + DaisyUI card layout.
+  - Implemented validation with react-hook-form + Zod.
+  - Error handling for invalid email & weak passwords.
+  - Integrated with Redux authSlice → dispatching loginUser / signupUser.
+  - On successful login/signup, users are auto-redirected to Homepage.
+
+- Authentication State:
+  - On app load, checkAuth is dispatched to verify authentication status.
+  - useSelector used to manage isAuthenticated, loading, and error.
+
+- Frontend & backend now connected for authentication
+- Made few updates in backend code ,cors,enhanced token security,
+
 
 ## 🛠️ Tech Stack
 
@@ -28,8 +50,9 @@ A modern, responsive frontend for CodeClimb, a LeetCode-style coding platform bu
 - Advanced code execution features
 
 
-## Project Structure
+## 📁 Project Structure
 
+```
 frontend/
 ├── node_modules/       # Dependencies
 ├── public/            # Static assets
@@ -50,6 +73,7 @@ frontend/
 ├── package.json       # Project dependencies
 ├── README.md          # Project documentation
 └── vite.config.js     # Vite configuration
+```
 
 ## ⚡ Installation & Setup
  

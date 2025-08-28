@@ -25,9 +25,24 @@ const register = async(req,res) =>{
         //once registerd, send  token
         const token = jwt.sign({_id:user.id, emailId:emailId ,role:'user'},process.env.SECRET_KEY,{expiresIn: 3600}); //in sec
 
-        res.cookie('token',token,{maxAge:3600*1000}); //in ms
+      res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,         // since im on localhost (http)
+            sameSite: "strict",
+            maxAge: 60 * 60 * 1000 
+       });
 
-        res.status(201).send("User registerd successfully");
+        
+        const reply = {
+            firstName:user.firstName,
+            emailId:user.emailId,
+            _id:user._id
+        }
+
+        res.status(201).json({
+            user:reply,
+            message:"Registered Successfully"
+        });
 
    } 
    
@@ -58,9 +73,23 @@ const login = async(req,res)=>{
         //once logined , send  token
         const token = jwt.sign({_id:user.id, emailId:emailId,role:user.role},process.env.SECRET_KEY,{expiresIn: 3600}); 
 
-        res.cookie('token',token,{maxAge:3600*1000}); 
+      res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,         
+            sameSite: "strict",
+            maxAge: 60 * 60 * 1000 
+       });
 
-        res.status(200).send("Logined Successfully");
+        
+        const reply = {
+            firstName:user.firstName,
+            emailId:user.emailId,
+            _id:user._id
+        }
+        res.status(201).json({
+            user:reply,
+            message:"Loggined successfully"
+        })
 
     } 
     catch (error) {
@@ -110,7 +139,12 @@ const adminRegister = async (req,res)=>
         //once registerd, send  token
         const token = jwt.sign({_id:user.id, emailId:emailId ,role:user.role},process.env.SECRET_KEY,{expiresIn: 3600}); 
 
-        res.cookie('token',token,{maxAge:3600*1000}); //in ms
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,         // since im on localhost (http)
+            sameSite: "strict",
+            maxAge: 60 * 60 * 1000 
+       });
 
         res.status(201).send("User registerd successfully");
 

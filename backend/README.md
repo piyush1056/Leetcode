@@ -93,7 +93,18 @@ A lot of features and functionalities to be added in future.
 - Redis ZADD, ZREMRANGEBYSCORE, ZCARD, EXPIRE
 - remove old requests, count current window, add new entry, set key expiration
 
+## DAY09
+**Authentication Updates**
+- Enhanced Security Features Implemented:
+   - JSON Responses: Login/register endpoints now return user data + tokens instead of plain text messages
+   - Secure Cookies: Added httpOnly ,Secure and sameSite flags for better security
+- New Endpoint Added:  "/check" :	Validates user token and returns user data if authenticated 
+  - Enables frontend to immediately check user authentication status on app load
+  - Eliminates need for additional API calls to get user data
+  - Provides seamless user experience (dont redirects to login if already authenticated)
+  - Installed and configured **CORS middleware** to enable communication between frontend (React @ localhost:5173) and backend.
 
+  
 # Upcoming Work
 - AI-powered chatbot integration  
 - Video integration for problem explanations  
