@@ -35,7 +35,19 @@ A modern, responsive frontend for CodeClimb, a LeetCode-style coding platform bu
   - useSelector used to manage isAuthenticated, loading, and error.
 
 - Frontend & backend now connected for authentication
-- Made few updates in backend code ,cors,enhanced token security,
+- Made few updates in backend code ,cors,enhanced token security
+
+# Day 03: Enhancements & Homepage Design  
+- Enhanced Signup Page:
+  - Added eye icon for show/hide password functionality
+  - Implemented **"Already have an account? Sign in"** navigation link on the signup page. 
+  - Added loading state ,Signup button is disabled while loading to prevent multiple requests.
+  - Users see a **loading indicator** instead of a blank page/flash when the page is refreshed.
+
+- Homepage Design
+  - Created responsive homepage layout
+  - Added filter options for problems by difficulty and tags
+  - Implemented problem status filtering (solved/unsolved)  
 
 
 ## 🛠️ Tech Stack

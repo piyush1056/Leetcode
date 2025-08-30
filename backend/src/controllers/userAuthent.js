@@ -40,6 +40,7 @@ const register = async(req,res) =>{
         }
 
         res.status(201).json({
+            success: true,
             user:reply,
             message:"Registered Successfully"
         });
