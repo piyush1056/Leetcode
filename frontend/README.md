@@ -49,6 +49,15 @@ A modern, responsive frontend for CodeClimb, a LeetCode-style coding platform bu
   - Added filter options for problems by difficulty and tags
   - Implemented problem status filtering (solved/unsolved)  
 
+# Day 04: Admin Panel & Problem Creation System
+- New Features Added:
+   - Admin Problem Creation Interface: Comprehensive form for creating coding problems with validation
+   - Multi-language Support: Support for C++, Java, and JavaScript with separate code templates
+   - Test Case Management: Dynamic form for adding visible and hidden test cases
+   - Test Case Management: Dynamic form for adding visible and hidden test cases
+
+- "The admin panel offers a streamlined interface for adding coding problems with validation and structured data management."   
+
 
 ## 🛠️ Tech Stack
 

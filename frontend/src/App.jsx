@@ -5,7 +5,7 @@ import Homepage from "./pages/Homepage";
 import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth } from "./authSlice";
 import { useEffect } from "react";
-
+import AdminPanel from "./pages/AdminPanel";
 function App(){
   
   const dispatch = useDispatch();
@@ -26,8 +26,16 @@ function App(){
   <>
     <Routes>
       <Route path="/" element={isAuthenticated ?<Homepage></Homepage>:<Navigate to="/signup" />}></Route>
-      <Route path="/login" element={isAuthenticated?<Navigate to="/" />:<Login></Login>}></Route>
+      <Route path="/login" element={isAuthenticated?<Navigate to="/" />:<Login></Login> }></Route>
       <Route path="/signup" element={isAuthenticated?<Navigate to="/" />:<Signup></Signup>}></Route>
+      <Route path="/admin" element={<AdminPanel/>}></Route>
+        {/* <Route 
+        path="/admin" 
+        element={
+          isAuthenticated && user?.role === 'admin' ? 
+            <AdminPanel /> : 
+            <Navigate to="/" />
+        } /> */}
     </Routes>
   </>
   )

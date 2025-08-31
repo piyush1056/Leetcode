@@ -36,7 +36,8 @@ const register = async(req,res) =>{
         const reply = {
             firstName:user.firstName,
             emailId:user.emailId,
-            _id:user._id
+            _id:user._id,
+            role:user.role
         }
 
         res.status(201).json({
@@ -85,7 +86,8 @@ const login = async(req,res)=>{
         const reply = {
             firstName:user.firstName,
             emailId:user.emailId,
-            _id:user._id
+            _id:user._id,
+            role:user.role
         }
         res.status(201).json({
             user:reply,
@@ -146,8 +148,18 @@ const adminRegister = async (req,res)=>
             sameSite: "strict",
             maxAge: 60 * 60 * 1000 
        });
-
-        res.status(201).send("User registerd successfully");
+       
+        const reply = {
+            firstName:user.firstName,
+            emailId:user.emailId,
+            _id:user._id,
+            role:user.role
+        }
+      res.status(201).json({
+            success: true,
+            user:reply,
+            message:"Registered Successfully"
+        });
 
    } 
    
