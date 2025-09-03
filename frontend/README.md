@@ -56,7 +56,18 @@ A modern, responsive frontend for CodeClimb, a LeetCode-style coding platform bu
    - Test Case Management: Dynamic form for adding visible and hidden test cases
    - Test Case Management: Dynamic form for adding visible and hidden test cases
 
-- "The admin panel offers a streamlined interface for adding coding problems with validation and structured data management."   
+- The admin panel offers a streamlined interface for adding coding problems with validation and structured data management. 
+
+# Day 05: Monaco Editor Integration & Problem Solving Interface
+- Professional Code Editor: Integrated Monaco Editor (VS Code's editor) with syntax highlighting for C++, Java, and JavaScript
+- Dual-Panel Problem Interface: Built problem page with left panel for problem description and right panel for code editing
+- Real-time Code Execution: Implemented run and submit functionality with test case results display
+- Language Support: Added multi-language switcher between C++, Java, and JavaScript with proper code templates
+- Enhanced UI/UX: Created tabbed navigation for problem description, editorial, solutions, and submission history
+- Admin Authorization System: Implemented role-based access control where admin panel with problem management options (create, update, delete) is exclusively visible to admin users only
+- The platform now provides a complete coding environment with secure role-based access, allowing admins to manage problems while maintaining a seamless solving experience for regular users
+
+
 
 
 ## 🛠️ Tech Stack
