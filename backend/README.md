@@ -104,6 +104,17 @@ A lot of features and functionalities to be added in future.
   - Provides seamless user experience (dont redirects to login if already authenticated)
   - Installed and configured **CORS middleware** to enable communication between frontend (React @ localhost:5173) and backend.
 
+  ## DAY10
+- Added AI doubt solver API using Google Gemini
+- New End point created for ai doubt solve
+- Features of my ai model by adding prompt:
+   - Context-Aware: Strictly problem-specific responses
+   - Multi-Format: JSON responses with code, explanation, examples
+   - Beautifully formatted code with dark them
+   - Multiple assistance modes (hints, code review, solutions)
+   - Code Ready: Copy-paste friendly formatted code
+   - Prevents off-topic queries - focuses only on current DSA problem
+
   
 # Upcoming Work
 - AI-powered chatbot integration  
