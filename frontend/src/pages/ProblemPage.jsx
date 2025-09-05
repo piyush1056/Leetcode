@@ -184,6 +184,12 @@ const ProblemPage = () => {
           >
             Submissions
           </button>
+           <button
+            className={`tab ${activeLeftTab === 'chatAI' ? 'tab-active' : ''}`}
+            onClick={() => setActiveLeftTab('chatAI')}
+          >
+            ChatAI
+          </button>
         </div>
 
         {/* Left Content */}
@@ -269,6 +275,17 @@ const ProblemPage = () => {
                   <SubmissionHistory problemId={problemId} />
                 </div>
               )}
+                {activeLeftTab === 'chatAI' && (
+                <div className="p-6">
+                  <h2 className="text-xl font-bold mb-4 text-base-content">ChatAI</h2>
+                  <div className="bg-base-100 p-6 rounded-lg border border-base-300">
+                    <div className="whitespace-pre-wrap text-base leading-relaxed text-base-content">
+                      Chat with AI helper
+                    </div>
+                  </div>
+                </div>
+              )}
+
             </>
           )}
         </div>
@@ -482,4 +499,4 @@ const ProblemPage = () => {
   );
 };
 
-export default ProblemPage;v 
+export default ProblemPage;

@@ -1,5 +1,6 @@
 const {getLanguageById,submitBatch,submitToken} = require("../utils/ProblemUtility");
 const Problem = require("../models/problem");
+const User = require("../models/user");
 const Submission = require("../models/submission");
 
 const createProblem = async (req,res)=>{
@@ -269,12 +270,7 @@ const submittedProblem = async(req,res) => {
 
     const ans  = await Submission.find({userId,problemId});
 
-    if(!ans.length)
-    {
-      return  res.status(200).send("No submission is present");
-    }
-
-     return res.status(200).send(ans);
+    return res.status(200).json(ans);
 
     
   } 
