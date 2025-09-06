@@ -6,16 +6,27 @@ const SubmissionHistory = ({ problemId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
+  const [lastFetchTime, setLastFetchTime] = useState(0);
 
   useEffect(() => {
     const fetchSubmissions = async () => {
+   //cache check ,no same re inside 30
+       if (Date.now() - lastFetchTime < 30000) {
+        return;
+      }
       try {
         setLoading(true);
         const response = await axiosClient.get(`/problem/submittedProblem/${problemId}`);
         setSubmissions(response.data);
         setError(null);
+        setLastFetchTime(Date.now());
       } catch (err) {
-        setError('Failed to fetch submission history');
+        if (err.response?.status === 429) {
+          setError('Too many requests. Please try again in a few minutes.');
+        }
+         else{
+          setError('Failed to fetch submission history');
+         }
         console.error(err);
       } finally {
         setLoading(false);
@@ -23,7 +34,7 @@ const SubmissionHistory = ({ problemId }) => {
     };
 
     fetchSubmissions();
-  }, [problemId]);
+  }, [problemId , lastFetchTime]);
 
   const getStatusColor = (status) => {
     switch (status) {

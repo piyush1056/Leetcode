@@ -4,6 +4,7 @@ import Editor from '@monaco-editor/react';
 import { useParams } from 'react-router';
 import axiosClient from "../utils/axiosClient"
 import SubmissionHistory from "../components/SubmissionHistory"
+import ChatAi from "../components/ChatAi"
 
 const langMap = {
   cpp: 'C++',
@@ -250,6 +251,11 @@ const ProblemPage = () => {
               {activeLeftTab === 'solutions' && (
                 <div className="p-6">
                   <h2 className="text-xl font-bold mb-4 text-base-content">Solutions</h2>
+
+                    {console.log('Full referenceSolution:', problem.referenceSolution)}
+    {problem.referenceSolution?.map((sol, i) => (
+      console.log(`Solution ${i}:`, sol)
+    ))}
                   <div className="space-y-6">
                     {(problem.referenceSolution || []).map((solution, index) => (
                       <div key={index} className="border border-base-300 rounded-lg bg-base-100">
@@ -260,7 +266,7 @@ const ProblemPage = () => {
                         </div>
                         <div className="p-4">
                           <pre className="bg-base-300 p-4 rounded text-sm overflow-x-auto">
-                            <code className="text-base-content">{solution.completeCode}</code>
+                            <code className="text-base-content">{solution.completeCode || solution.complete_code || solution.code || 'No code available'}</code>
                           </pre>
                         </div>
                       </div>
@@ -280,7 +286,7 @@ const ProblemPage = () => {
                   <h2 className="text-xl font-bold mb-4 text-base-content">ChatAI</h2>
                   <div className="bg-base-100 p-6 rounded-lg border border-base-300">
                     <div className="whitespace-pre-wrap text-base leading-relaxed text-base-content">
-                      Chat with AI helper
+                     <ChatAi problem={problem}></ChatAi>
                     </div>
                   </div>
                 </div>

@@ -17,7 +17,7 @@ app.use(cookieParser());
 
 app.use('/user',authRouter);
 app.use('/problem',problemRouter);
-app.use('/submission' ,problemRouter);
+app.use('/submission' ,submitRouter);
 app.use('/ai',aiRouter);
 
 

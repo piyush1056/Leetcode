@@ -33,6 +33,9 @@ export const checkAuth = createAsyncThunk(
       const { data } = await axiosClient.get('/user/check');
       return data.user;
     } catch (error) {
+       if (error.response?.status === 401) {
+        return rejectWithValue(null); // Special case for no session
+      }
       return rejectWithValue(error);
     }
   }
