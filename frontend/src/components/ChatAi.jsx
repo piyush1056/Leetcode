@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axiosClient from "../utils/axiosClient";
 import { Send } from 'lucide-react';
+import { Bot, User } from 'lucide-react';
 
 function ChatAi({problem}) {
     const [messages, setMessages] = useState([
@@ -52,10 +53,18 @@ function ChatAi({problem}) {
                     <div 
                         key={index} 
                         className={`chat ${msg.role === "user" ? "chat-end" : "chat-start"}`}
-                    >
-                        <div className="chat-bubble bg-base-200 text-base-content">
-                            {msg.parts[0].text}
-                        </div>
+                    > <div className="flex items-center gap-2">
+                          {/*  Add icon based on role */}
+                           {msg.role === "user" ? (
+                            <User size={20} className="text-primary" />
+                               ) : (
+                                     <Bot size={20} className="text-secondary" />
+                                    )}
+        <div className="chat-bubble bg-base-200 text-base-content">
+            {msg.parts[0].text}
+        </div>
+    </div>
+
                     </div>
                 ))}
                 <div ref={messagesEndRef} />
