@@ -115,6 +115,20 @@ A lot of features and functionalities to be added in future.
    - Code Ready: Copy-paste friendly formatted code
    - Prevents off-topic queries - focuses only on current DSA problem
 
+## DAY11
+- Created a new solutionVideo schema to add editorial videos for coding 
+problems
+- Schema fields include:
+  - problemId → References the related problem
+  - userId → References the uploader (admin or user)
+  - cloudinaryPublicId → Unique identifier for Cloudinary asset
+  - secureUrl → Direct secure link to the uploaded video
+  - thumbnailUrl (optional) → Preview image for the video
+  - duration → Stores video length in seconds
+- Enabled automatic timestamps for upload tracking  
+- Prepared groundwork for Cloudinary integration:
+  - Videos will be uploaded directly from the frontend
+  - Backend will provide token & digital signature for secure upload
   
 # Upcoming Work
 - AI-powered chatbot integration  
