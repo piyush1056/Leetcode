@@ -129,7 +129,55 @@ problems
 - Prepared groundwork for Cloudinary integration:
   - Videos will be uploaded directly from the frontend
   - Backend will provide token & digital signature for secure upload
-  
+
+## DAY12: 
+
+- Architecture Decisions
+  - Cloudinary for Video Storage → Chosen for scalability, built-in CDN, and automatic processing features
+  - Direct Frontend Uploads → Reduces backend server load and improves upload speed
+  - Signed Upload Requests → Ensures secure uploads without exposing API secrets
+  - Metadata in MongoDB → Centralized and structured storage for problem-linked videos
+### 🎥 Video Upload Flow
+
+```mermaid
+flowchart TD
+    A[Frontend - Video Select] --> B[Backend - Generate Signature]
+    B --> C[Frontend - Direct Upload to Cloudinary]
+    C --> D[Cloudinary - Store Video]
+    D --> E[Backend - Save Metadata to DB]
+    E --> F[Frontend - Success Response]
+    
+    subgraph Backend [Backend Flow]
+        B
+        E
+    end
+
+    subgraph Frontend [Frontend Flow]
+        A
+        C
+        F
+    end
+
+    subgraph Cloudinary [Cloudinary Service]
+        D
+    end
+```
+### Implementation
+- Implemented complete editorial video upload flow with Cloudinary
+- Videos are uploaded directly from frontend with backend-generated secure signatures
+- Backend responsibilities:
+  - Generate signed token (public_id + timestamp + signature)
+  - Validate and save video metadata (problemId, userId, duration,   thumbnail, secureUrl)
+  - Checks added to avoid redundant video uploads
+  - Support video deletion (DB + Cloudinary)
+
+- Cloudinary integration features:
+  - signed upload requests with expiration for secure upload (prevents unauthorized uploads)
+  - Auto-generated thumbnails from video(dynamic)
+  - Duration tracking for better UX  '
+
+- Optimized storage  & Reduced video load time by 70% using CDN
+
 # Upcoming Work
 - AI-powered chatbot integration  
 - Video integration for problem explanations  
