@@ -15,7 +15,7 @@ const createRateLimiter = require("../middleware/rateLimiterMiddleware");
 
 
 authRouter.post("/register", createRateLimiter(3600, 3), register);
-authRouter.post("/login", createRateLimiter(900, 5), login);
+authRouter.post("/login", createRateLimiter(900, 15), login);
 authRouter.post("/logout", userMiddleware, logout);
 authRouter.post("/admin/register", adminMiddleware, createRateLimiter(86400, 1), adminRegister);
 authRouter.delete('/profile', userMiddleware, createRateLimiter(86400, 3), deleteProfile);
