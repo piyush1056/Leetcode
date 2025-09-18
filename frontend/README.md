@@ -68,6 +68,15 @@ A modern, responsive frontend for CodeClimb, a LeetCode-style coding platform bu
 - The platform now provides a complete coding environment with secure role-based access, allowing admins to manage problems while maintaining a seamless solving experience for regular users
 
 
+# DAY 06: Admin Panel for Direct Cloudinary Video Uploads
+- Problem List & Management UI: Built AdminVideo component to display all problems with title, difficulty, and tags in a clean table.
+- Video Upload Feature: Added upload button per problem linking to AdminUpload form for direct Cloudinary uploads.
+- Upload Form Component: Built AdminUpload component to handle direct Cloudinary video uploads using backend-generated signatures.
+- Validation & Feedback: Added file type/size validation (max 100 MB), live upload progress bar, and success/error states in the UI.
+- Video Info Display: Shows selected file details (name and size) before upload and displays uploaded video duration & timestamp after success.
+- Delete Video feature: Integrated delete button to remove a video from the UI after confirmation.
+- Enhanced Admin Experience: Admins can now upload, view progress, and manage video solutions entirely from the frontend interface with clear feedback.
+The frontend now provides a complete admin interface for securely uploading, previewing, and managing problem videos directly from the browser.
 
 
 ## 🛠️ Tech Stack
