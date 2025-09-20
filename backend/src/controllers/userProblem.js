@@ -220,13 +220,15 @@ const getProblemById = async(req,res)=>{
 
        if(videos){    
         const { secureUrl, cloudinaryPublicId, thumbnailUrl, duration } = videos;
-        
-         getProblem.secureUrl = secureUrl;
-         getProblem.cloudinaryPublicId = cloudinaryPublicId;
-         getProblem.thumbnailUrl = thumbnailUrl;
-         getProblem.duration = duration;
+        const responseData = {
+    ...getProblem.toObject(),
+       secureUrl:secureUrl,
+       thumbnailUrl :thumbnailUrl,
+       duration : duration,
+   } 
 
-   return res.status(200).send(getProblem);
+
+   return res.status(200).send(responseData);
    }
     
 

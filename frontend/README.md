@@ -78,6 +78,13 @@ A modern, responsive frontend for CodeClimb, a LeetCode-style coding platform bu
 - Enhanced Admin Experience: Admins can now upload, view progress, and manage video solutions entirely from the frontend interface with clear feedback.
 The frontend now provides a complete admin interface for securely uploading, previewing, and managing problem videos directly from the browser.
 
+# DAY 07: Integrated Feature-Rich Video Player for Editorial Tab
+- Added Plyr React Player Component: Implemented a new video player component using Plyr in the Editorial tab.
+- Full Playback Controls: Play/pause, progress bar with time display, volume, captions, settings menu, and fullscreen support.
+- Speed & Quality Options: Users can adjust playback speed and switch between multiple video qualities when available.
+- Cloudinary Secure URL Support: Player automatically loads problem videos from secure Cloudinary URLs and optional multiple qualities.
+- Enhanced Viewing Experience: Editorial videos now use a modern, responsive player with better controls and accessibility.
+
 
 ## 🛠️ Tech Stack
 

@@ -5,12 +5,14 @@ import { useParams } from 'react-router';
 import axiosClient from "../utils/axiosClient"
 import SubmissionHistory from "../components/SubmissionHistory"
 import ChatAi from "../components/ChatAi"
+import Editorial from '../components/Editorial';
 
 const langMap = {
   cpp: 'C++',
   java: 'Java',
   javascript: 'JavaScript'
 };
+
 
 const ProblemPage = () => {
   const [problem, setProblem] = useState(null);
@@ -242,7 +244,18 @@ const ProblemPage = () => {
                   <h2 className="text-xl font-bold mb-4 text-base-content">Editorial</h2>
                   <div className="bg-base-100 p-6 rounded-lg border border-base-300">
                     <div className="whitespace-pre-wrap text-base leading-relaxed text-base-content">
-                      Editorial content will be available soon.
+                    
+                      {problem.secureUrl ? (
+                 <Editorial
+                 sources={[
+                 { src: problem.secureUrl, type: "video/mp4", size: 720 },
+             
+                 ]}
+                thumbnailUrl={problem.thumbnailUrl}
+               />
+               ) : (
+                    <p>No video available</p>
+                    )}
                     </div>
                   </div>
                 </div>
