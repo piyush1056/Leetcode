@@ -16,6 +16,8 @@ This client-side implementation features real-time code execution, contest parti
 - Code Editor: Monaco Editor  
 - Video Player: Plyr React  
 - Form Validation: React Hook Form + Zod  
+- Authentication: Google OAuth (@react-oauth/google)
+- Notifications: React Hot Toast
 
 ## Progress & History
 For detailed daily logs, see [Frontend Changelog](docs/FRONTEND_CHANGELOG.md).
@@ -29,6 +31,11 @@ For detailed daily logs, see [Frontend Changelog](docs/FRONTEND_CHANGELOG.md).
 - Role-based access control (user/admin)  
 - Persistent authentication state with Redux  
 - Automatic session validation on app load  
+- Google OAuth integration with one-click sign-in
+- GoogleSignInButton component for seamless authentication
+- Dual authentication support (email/password + Google)
+- Toast notifications for authentication feedback
+- Beautiful login/signup cards with Google integration
 
 ### 🏠 Homepage & Navigation
 - Responsive homepage layout with problem filtering  
@@ -63,6 +70,7 @@ For detailed daily logs, see [Frontend Changelog](docs/FRONTEND_CHANGELOG.md).
 - DaisyUI components for consistent styling  
 - Tailwind CSS for custom styling needs  
 - Optimized user experience across devices  
+- Elegant authentication forms with Google sign-in integration
 
 ---
 
@@ -117,10 +125,27 @@ cd frontend
 npm install
 
 3. Configure environment variables:
- Create a .env file in the root directory
+ Create a .env file in the root directory with:
+ VITE_API_BASE_URL=http://localhost:3000
+ VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 
 4. Start the development server:
   npm run dev
+
+---
+
+### Key Dependencies
+- `react` & `react-dom` - Core React libraries
+- `@reduxjs/toolkit` - State management
+- `react-router-dom` - Client-side routing
+- `axios` - HTTP client for API calls
+- **`@react-oauth/google` - Google OAuth integration**
+- **`react-hot-toast` - Toast notifications**
+- `react-hook-form` - Form handling
+- `zod` - Schema validation
+- `@monaco-editor/react` - Code editor
+- `tailwindcss` - Utility-first CSS framework
+
 
 ## 🔮 Future Enhancements
 

@@ -4,8 +4,8 @@ const createRateLimiter = (windowSizeInSeconds = 3600, maxRequests = 60) => {
   return async (req, res, next) => {
     try {
       // Use user ID if logged in; otherwise fall back to IP + User-Agent
-      const identifier = req.user
-        ? req.user.id
+      const identifier = req.result
+        ? req.result.id
         : `${req.ip}-${req.headers["user-agent"]}`;
       const key = `rate_limit:${identifier}`;
 

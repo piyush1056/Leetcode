@@ -8,7 +8,7 @@ export const registerUser = createAsyncThunk(
     const response =  await axiosClient.post('/user/register', userData);
     return response.data.user;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.response?.data?.message || 'Registration failed');
     }
   }
 );
@@ -21,11 +21,24 @@ export const loginUser = createAsyncThunk(
       const response = await axiosClient.post('/user/login', credentials);
       return response.data.user;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.response?.data?.message || 'Login failed');
     }
   }
 );
 
+export const googleSignIn = createAsyncThunk(
+  'auth/googleSignIn',
+  async ({ credential, userInfo }, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.post('/user/google-auth', {
+        credential: credential
+      });
+      return response.data.user;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Google sign-in failed');
+    }
+  }
+);
 export const checkAuth = createAsyncThunk(
   'auth/check',
   async (_, { rejectWithValue }) => {
@@ -33,10 +46,16 @@ export const checkAuth = createAsyncThunk(
       const { data } = await axiosClient.get('/user/check');
       return data.user;
     } catch (error) {
-       if (error.response?.status === 401) {
-        return rejectWithValue(null); // Special case for no session
+      
+      if (error.response?.status === 401) {
+        
+        return rejectWithValue({ type: 'NO_SESSION', message: null });
       }
-      return rejectWithValue(error);
+      // Only treat other errors as actual errors
+      return rejectWithValue({ 
+        type: 'ERROR', 
+        message: error.response?.data?.message || 'Auth check failed' 
+      });
     }
   }
 );
@@ -48,7 +67,7 @@ export const logoutUser = createAsyncThunk(
       await axiosClient.post('/user/logout');
       return null;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.response?.data?.message || 'Logout failed');
     }
   }
 );
@@ -59,9 +78,19 @@ const authSlice = createSlice({
     user: null,
     isAuthenticated: false,
     loading: false,
-    error: null
+    error: null,
+     initialCheckDone: false
   },
   reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+    clearAuth: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.loading = false;
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -74,10 +103,11 @@ const authSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = !!action.payload;
         state.user = action.payload;
+        state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || 'Something went wrong';
+        state.error = action.payload|| 'Registration failed';
         state.isAuthenticated = false;
         state.user = null;
       })
@@ -91,14 +121,31 @@ const authSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = !!action.payload;
         state.user = action.payload;
+         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || 'Something went wrong';
+        state.error = action.payload || 'Invalid email or password';
         state.isAuthenticated = false;
         state.user = null;
       })
-  
+      // Google Sign-In Cases (NEW)
+      .addCase(googleSignIn.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(googleSignIn.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = !!action.payload;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(googleSignIn.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Google sign-in failed';
+        state.isAuthenticated = false;
+        state.user = null;
+      })
       // Check Auth Cases
       .addCase(checkAuth.pending, (state) => {
         state.loading = true;
@@ -108,12 +155,21 @@ const authSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = !!action.payload;
         state.user = action.payload;
+        state.error = null;
+        state.initialCheckDone = true;
       })
       .addCase(checkAuth.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || 'Something went wrong';
+         if (action.payload?.type === 'NO_SESSION') {
+          // This is expected when user is not logged in - no error needed
+          state.error = null;
+        } else {
+          // Only set error for actual problems
+          state.error = action.payload?.message;
+        }
         state.isAuthenticated = false;
         state.user = null;
+        state.initialCheckDone = true;
       })
   
       // Logout User Cases
@@ -129,11 +185,11 @@ const authSlice = createSlice({
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || 'Something went wrong';
+        state.error = action.payload || 'Something went wrong';
         state.isAuthenticated = false;
         state.user = null;
       });
   }
 });
-
+export const { clearError, clearAuth } = authSlice.actions;
 export default authSlice.reducer;

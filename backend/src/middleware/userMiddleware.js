@@ -10,7 +10,12 @@ const userMiddleware= async (req,res,next)=>{
         const {token} = req.cookies;
 
         if(!token)
-            throw new Error("Invalid token");
+         {
+            return res.status(401).json({
+                success: false,
+                message: "Authentication required. No token provided."
+            });
+        }
 
        const payload =  jwt.verify(token,process.env.SECRET_KEY);
       
@@ -30,7 +35,13 @@ const userMiddleware= async (req,res,next)=>{
       const isBlocked = await redisClient.exists(`token:${token}`);
 
       if(isBlocked)
-        throw new Error("Invalid token");
+        if (isBlocked) {
+            return res.status(401).json({
+                success: false,
+                message: "Token has been invalidated."
+            });
+        }
+
      
      req.result=result;
 
@@ -39,7 +50,26 @@ const userMiddleware= async (req,res,next)=>{
 
     } 
     catch (error) {
-         throw new Error("Error:"+ error);
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid token."
+            });
+        }
+        
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                success: false,
+                message: "Token has expired."
+            });
+        }
+
+        // Handle other errors
+        console.error('UserMiddleware Error:', error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error."
+        });
         
     }
 }

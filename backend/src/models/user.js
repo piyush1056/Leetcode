@@ -33,7 +33,10 @@ const UserSchema = new Schema({
     },
     password:{
         type:String,
-        required:true
+         required: function() {
+            // Password only required for local auth users
+            return this.provider === 'local';
+        }
     },
     problemSolved:{
         type:[{
@@ -41,11 +44,21 @@ const UserSchema = new Schema({
             ref:'problem'
         }]  ,
                     // all unique solved problem
+    },
+     // New fields for OAuth
+  googleId: { type: String, unique: true, sparse: true },
+  provider: { type: String, enum: ['local','google'], default: 'local' },
+  avatar:   { type: String }  ,
+  emailVerified: {
+        type: Boolean,
+        default: false
     }
 },
  {
   timestamps:true  
  });
 
+//  UserSchema.index({ emailId: 1 });
+//  UserSchema.index({ googleId: 1 });
  const User = mongoose.model("user",UserSchema);
  module.exports=User;

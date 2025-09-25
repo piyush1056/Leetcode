@@ -8,13 +8,13 @@ A robust Node.js/Express backend for a LeetCode-like coding platform featuring u
 - **Framework:** Express.js  
 - **Database:** MongoDB with Mongoose ODM  
 - **Caching & Rate Limiting:** Redis  
-- **Authentication:** JWT, bcryptjs  
+- **Authentication:** Google OAuth (google-auth-library), JWT, bcryptjs  
 - **Validation:** validator library  
 - **Code Execution:** Judge0 API  
 - **AI Integration:** Google Gemini API  
 - **Video Storage:** Cloudinary  
 - **HTTP Client:** Axios  
-
+- 
 
 ## Progress & History
 For detailed daily logs, see [Backend Changelog](docs/BACKEND_CHANGELOG.md).
@@ -27,6 +27,9 @@ For detailed daily logs, see [Backend Changelog](docs/BACKEND_CHANGELOG.md).
 - Secure password hashing with bcrypt  
 - Redis-based JWT blacklisting for secure logout  
 - Role-based access control (user/admin)  
+- Google OAuth integration for seamless sign-in
+- Flexible user schema supporting both email/password and Google authentication
+- Automatic user creation for new Google sign-ins
 
 ### 📝 Problem Management
 - CRUD operations for coding problems (admin only)  
@@ -73,6 +76,7 @@ For detailed daily logs, see [Backend Changelog](docs/BACKEND_CHANGELOG.md).
 - POST `/user/register` – Register a new user and issue a JWT  
 - POST `/user/login` – Authenticate user credentials and return a JWT  
 - POST `/user/logout` – Invalidate the current JWT via Redis blacklisting (requires valid JWT)  
+- POST `/user/google-auth` – Authenticate with Google OAuth token and return JWT
 - POST `/user/admin/register` – Register a new admin account (admin-only)  
 - DELETE `/user/profile` – Delete the authenticated user’s profile  
 - GET `/user/check` – Verify the current JWT and return authenticated user data  
@@ -106,8 +110,8 @@ For detailed daily logs, see [Backend Changelog](docs/BACKEND_CHANGELOG.md).
 - Redis  
 - Cloudinary account  
 - Judge0 API access  
-- Google Gemini API key  
-
+- Google Gemini API key 
+- Google Cloud Console project with OAuth 2.0 credentials
 ### Installation
 1. Clone the repository and navigate to the backend directory  
 2. Install dependencies:  
@@ -123,7 +127,28 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 GEMINI_API_KEY=your_gemini_api_key      
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
 
+
+### Key Dependencies
+- `express` - Web framework
+- `mongoose` - MongoDB ODM  
+- `jsonwebtoken` - JWT implementation
+- `bcryptjs` - Password hashing
+- `redis` - Caching and rate limiting
+- **`google-auth-library` - Google OAuth verification**
+- `validator` - Input validation
+- `axios` - HTTP client for Judge0 API
+- `cloudinary` - Video storage
+
+### Authentication Methods
+1. **Traditional Email/Password:** Users register with email and password
+2. **Google OAuth:** Users sign in with their Google account
+   - Frontend sends Google credential token to `/user/google-auth`
+   - Backend verifies token with Google's servers  
+   - Creates new user if first-time, or logs in existing user
+   - Returns JWT for subsequent API calls
+   
 ## 🔮 Future Enhancements
 - WebSocket integration for real-time collaboration
 - Enhanced admin dashboard with analytics

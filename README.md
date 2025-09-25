@@ -30,7 +30,9 @@ As a final-year computer science student passionate about competitive programmin
 ### 🔐 Secure Authentication System  
 - JWT-based authentication with Redis token blacklisting  
 - Role-based access control (User/Admin)  
-- Secure password hashing and validation  
+- Secure password hashing and validation 
+- Google OAuth integration for one-click sign-in
+- Dual authentication support (traditional + social login)
 
 ### 💻 Advanced Code Execution Engine  
 - Multi-language support (C++, Java, Python, JavaScript)  
@@ -69,6 +71,7 @@ As a final-year computer science student passionate about competitive programmin
 - Database: MongoDB with Mongoose ODM  
 - Caching: Redis for rate limiting and session management  
 - Authentication: JWT with bcrypt encryption  
+- OAuth Integration: Google Auth Library for secure  token verification
 - Code Execution: Judge0 API integration  
 - AI Integration: Google Gemini API  
 - File Storage: Cloudinary for video management  
@@ -80,6 +83,8 @@ As a final-year computer science student passionate about competitive programmin
 - Code Editor: Monaco Editor (VS Code engine)  
 - Routing: React Router with protected routes  
 - Video Player: Plyr React for enhanced playback  
+- OAuth Integration: @react-oauth/google for seamless sign-in
+- Notifications: React Hot Toast for user feedback
 
 ### Development Tools  
 - Validation: Zod schema validation  
@@ -128,6 +133,7 @@ CodeClimb/
 - Judge0 API access  
 - Cloudinary account  
 - Google Gemini API key  
+- - Google Cloud Console project with OAuth 2.0 credentials
 
 ---
 
@@ -148,6 +154,7 @@ REDIS_URL=your_redis_url
 JUDGE0_API_URL=your_judge0_endpoint
 CLOUDINARY_CLOUD_NAME=your_cloudinary_name
 GEMINI_API_KEY=your_gemini_key
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
 
 npm run dev
 
@@ -156,7 +163,8 @@ npm run dev
   npm install
 
 # Configure environment
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=http://localhost:3000
+VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 
 npm run dev
 
@@ -171,7 +179,7 @@ npm run dev
 
 ### Backend RESTful Endpoints  
 
-- **Authentication** (`/user/*`) – Registration, login/logout, session checks  
+- **Authentication** (`/user/*`) – Registration, login/logout,Google OAuth ,session checks  
 - **Problems** (`/problem/*`) – CRUD operations and user-specific queries  
 - **Submissions** (`/submission/*`) – Code execution, final submissions, history  
 - **AI Assistance** (`/ai/chat`) – Context-aware coding help  
@@ -194,7 +202,7 @@ During development, I tackled several complex problems:
 ## 🔮 Roadmap  
 
 - Contest system with real-time leaderboards  
-- Google/GitHub OAuth integration  
+- GitHub OAuth integration (Google OAuth ✅ complete)
 - Payment gateway for premium features  
 - Real-time chat and collaboration    
 - Advanced analytics dashboard  
@@ -207,9 +215,10 @@ During development, I tackled several complex problems:
 ✅ Frontend UI and navigation implemented  
 ✅ Code execution engine operational  
 ✅ AI assistance integrated  
-✅ Video solutions system functional  
+✅ Video solutions system functional 
+✅ Google OAuth integration complete 
 
-🚧 OAuth implementation in progress  
+
 🚧 Contest features under development  
 
 ---

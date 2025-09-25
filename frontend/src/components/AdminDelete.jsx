@@ -28,7 +28,7 @@ const AdminDelete = () => {
     if (!window.confirm('Are you sure you want to delete this problem?')) return;
     
     try {
-      await axiosClient.delete(`/problem/delete/${id}`);
+      await axiosClient.delete(`/problem/${id}`, { withCredentials: true });
       setProblems(problems.filter(problem => problem._id !== id));
     } catch (err) {
       setError('Failed to delete problem');

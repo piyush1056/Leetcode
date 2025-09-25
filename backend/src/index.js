@@ -11,7 +11,7 @@ const cors  = require("cors")
 const aiRouter = require("./routes/aiChatting");
 const videoRouter = require("./routes/videoCreator");
 
-app.use(cors( {origin: "http://localhost:5173", credentials:true } ));
+app.use(cors( {origin: ['http://localhost:3000', 'http://localhost:5173'], credentials:true } ));
 
 app.use(express.json());
 app.use(cookieParser());
