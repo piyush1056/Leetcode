@@ -1,3 +1,14 @@
+# Development Practices & Version Control
+
+This changelog demonstrates systematic development practices using Git version control:
+- **Feature Branching:** Each major feature developed in isolated branches
+- **Code Reviews:** All changes reviewed before merging to main
+- **Documentation:** README files updated with each feature release
+- **Environment Management:** Proper .env configuration for different deployment stages
+
+**Recent Branches:**
+- `oauth-integration` → Google OAuth implementation (merged)
+
 
 # Backend Development Changelog
  
@@ -145,6 +156,26 @@ flowchart TD
         D
     end
 ```
+## DAY13: Google OAuth Integration & Security Enhancement
+**OAuth Authentication System Implementation**
+- Integrated Google OAuth 2.0 for seamless user authentication
+- Key Features Implemented:
+  - Google Auth Library integration for server-side token verification
+  - Modified User schema to support OAuth fields (googleId, optional password)
+  - New API endpoint: `POST /user/google-auth` for Google credential verification
+  - Automatic user creation for first-time Google sign-ins
+  - Existing user linking with Google accounts
+  - Maintained JWT consistency across both auth methods
+  - Rate limiting applied to OAuth endpoints (same as traditional auth)
+
+  ## Version Control & Development Workflow
+**GitHub Branch Management:**
+- Created feature branch `oauth-integration` for Google OAuth implementation
+- Followed Git best practices: feature → development → main workflow
+- Implemented proper commit messaging and pull request reviews
+- Maintained clean commit history with descriptive messages
+- Used branch protection and merge strategies for code quality
+
 ### Implementation
 - Implemented complete editorial video upload flow with Cloudinary
 - Videos are uploaded directly from frontend with backend-generated secure signatures
