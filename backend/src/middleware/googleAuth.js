@@ -16,20 +16,32 @@ const verifyGoogleToken = async (req, res, next) => {
         // Verify the Google ID token
         const ticket = await client.verifyIdToken({
             idToken: credential,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: process.env.GOOGLE_CLIENT_ID, 
         });
 
         const payload = ticket.getPayload();
+        if (!payload) {
+        return res.status(401).json({
+          success: false,
+           message: 'Invalid Google token payload'
+         });
+      }
+      if (!payload.email_verified) {
+           return res.status(401).json({
+            success: false,
+            message: 'Google email not verified'
+           });
+         }
+
         
         // Extract user information from the verified token
-        const googleUser = {
-            googleId: payload.sub,
-            email: payload.email,
-            firstName: payload.given_name,
-            lastName: payload.family_name,
-            picture: payload.picture,
-            emailVerified: payload.email_verified
-        };
+       const googleUser = {
+    googleId: payload.sub,
+    emailId: payload.email,             
+    fullName: payload.name || `${payload.given_name || ''} ${payload.family_name || ''}`.trim(),  
+    avatar: payload.picture,         
+    emailVerified: payload.email_verified
+};
 
         // Attach verified user data to request
         req.googleUser = googleUser;

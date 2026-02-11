@@ -28,12 +28,18 @@ const videoSchema = new Schema({
     type: Number,
     required: true
   },
+  title: {
+     type: String,
+     trim: true,
+     maxLength: 100
+    },
+
 },{
     timestamps:true
 });
 
-
-
+videoSchema.index({ problemId: 1 });
+videoSchema.index({ userId: 1 });
 const SolutionVideo = mongoose.model("solutionVideo",videoSchema);
 
 module.exports = SolutionVideo;

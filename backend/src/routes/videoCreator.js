@@ -1,11 +1,11 @@
 const express = require('express');
-const adminMiddleware = require('../middleware/adminMiddleware');
+const { verifyToken, loadUser, isAdmin } = require('../middleware/auth');
 const videoRouter =  express.Router();
-const {generateUploadSignature,saveVideoMetadata,deleteVideo} = require("../controllers/videoSection")
+const {generateUploadSignature,saveVideoMetadata,deleteVideo } = require("../controllers/videoSection")
 
-videoRouter.get("/create/:problemId",adminMiddleware,generateUploadSignature);
-videoRouter.post("/save",adminMiddleware,saveVideoMetadata);
-videoRouter.delete("/delete/:problemId",adminMiddleware,deleteVideo);
+videoRouter.get("/upload/:problemId", verifyToken, loadUser, isAdmin, generateUploadSignature);
+videoRouter.post("/save/:problemId", verifyToken, loadUser, isAdmin, saveVideoMetadata);
+videoRouter.delete("/delete/:problemId", verifyToken, loadUser, isAdmin, deleteVideo);
 
 
 module.exports = videoRouter;

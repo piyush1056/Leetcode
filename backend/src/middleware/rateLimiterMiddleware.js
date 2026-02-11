@@ -4,12 +4,12 @@ const createRateLimiter = (windowSizeInSeconds = 3600, maxRequests = 60) => {
   return async (req, res, next) => {
     try {
       // Use user ID if logged in; otherwise fall back to IP + User-Agent
-      const identifier = req.result
-        ? req.result.id
-        : `${req.ip}-${req.headers["user-agent"]}`;
+      const identifier = req.userId
+        ? req.userId
+        : `${req.ip}-${req.headers["user-agent"] || "unknown"}`;
       const key = `rate_limit:${identifier}`;
 
-      const currentTime = Math.floor(Date.now() / 1000); // Current timestamp in seconds
+      const currentTime = Math.floor(Date.now() / 1000); 
       const windowStartTime = currentTime - windowSizeInSeconds;
 
       // Remove all entries older than the window start time
