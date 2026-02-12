@@ -1,49 +1,105 @@
-import {Routes, Route ,Navigate} from "react-router";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Homepage from "./pages/Homepage";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkAuth } from "./authSlice";
-import { useEffect } from "react";
-import AdminPanel from "./components/AdminPanel";
-import ProblemPage from "./pages/ProblemPage"
-import Admin from "./pages/Admin";
-import AdminDelete from "./components/AdminDelete"
-import AdminVideo from "./components/AdminVideo";
-import AdminUpload from "./components/AdminUpload";
-function App(){
-  
-  const dispatch = useDispatch();
-  const {isAuthenticated,user,loading,initialCheckDone } = useSelector((state)=>state.auth);
+import { checkAuth } from './redux/slices/authSlice';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import LandingPage from './pages/LandingPage';
+import Navbar from './components/Navbar';
+import ProblemsPage from './pages/ProblemsPage';
+import WorkspacePage from './pages/WorkspacePage/index';
+import WorkspaceNavbar from './components/workspace/WorkspaceNavbar'; 
+import AdminLayout from './pages/admin/AdminLayout'
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ProblemList from './pages/admin/ProblemList';
+import UsersList from './pages/admin/UsersList';
+import ProblemForm from './components/admin/ProblemForm';
+import ProfilePage from './pages/user/ProfilePage';
+import SubmissionsPage from './pages/user/SubmissionsPage';
+import EditProfilePage from './pages/user/EditProfilePage';
+import SolvedProblemsPage from './pages/user/SolvedProblemsPage';
+import LeaderboardPage from './pages/user/LeaderboardPage';
+import SavedProblemsPage from './pages/user/SavedProblemsPage';
+import PublicProfilePage from './pages/user/PublicProfilePage';
 
-  // check initial authentication
+
+
+const AdminGuard = ({ children }) => {
+  const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
+
+  if (loading) return <div className="h-screen flex items-center justify-center"><span className="loading loading-spinner"></span></div>;
+  if (!isAuthenticated || user?.role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
+function AppContent() {
+  const dispatch = useDispatch();
+  const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const location = useLocation();
+
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
 
- if (!initialCheckDone) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
-  }
-  return(
-  <>
-    <Routes>
-      <Route path="/" element={isAuthenticated ?<Homepage></Homepage>:<Navigate to="/signup" />}></Route>
-      <Route path="/login" element={isAuthenticated?<Navigate to="/" />:<Login></Login> }></Route>
-      <Route path="/signup" element={isAuthenticated?<Navigate to="/" />:<Signup></Signup>}></Route>
-      <Route path="/admin" element={isAuthenticated && user?.role === 'admin' ? <Admin /> : <Navigate to="/" />} />
-      <Route path="/admin/create" element={isAuthenticated && user?.role === 'admin' ? <AdminPanel /> : <Navigate to="/" />} />
-      <Route path="/admin/delete" element={isAuthenticated && user?.role === 'admin' ? <AdminDelete /> : <Navigate to="/" />} />
-      <Route path="/admin/video" element={isAuthenticated && user?.role === 'admin' ? <AdminVideo /> : <Navigate to="/" />} />
-      <Route path="/admin/upload/:problemId" element={isAuthenticated && user?.role === 'admin' ? <AdminUpload /> : <Navigate to="/" />} />
-      <Route path="/problem/:problemId" element={<ProblemPage/>}></Route>
-      
-    </Routes>
-  </>
-  )
+  
+
+  const isWorkspaceRoute = location.pathname.startsWith('/problem/');
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  return (
+    <>
+
+       {!isAdminRoute && (isWorkspaceRoute ? <WorkspaceNavbar /> : <Navbar />)}
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />} />
+        <Route path="/register" element={!isAuthenticated ? <SignupPage /> : <Navigate to="/" />} />
+
+        {/* User Routes */}
+        <Route path="/problems" element={isAuthenticated ? <ProblemsPage /> : <LoginPage />} />
+        <Route path="/problem/:id" element={isAuthenticated ? <WorkspacePage /> : <LoginPage />} />
+        <Route path="/profile" element={isAuthenticated ? <ProfilePage /> : <LoginPage />} />
+        <Route path="/submissions" element={isAuthenticated ? <SubmissionsPage /> : <LoginPage />} />
+        <Route path="/profile/edit" element={isAuthenticated ? <EditProfilePage /> : <LoginPage />} />
+        <Route  path="/my-problems/solved" element={isAuthenticated ? <SolvedProblemsPage /> : <LoginPage />} />
+        <Route path="/leaderboard" element={isAuthenticated ? <LeaderboardPage /> : <LoginPage />} />
+        <Route path="/my-problems/saved" element={isAuthenticated ? <SavedProblemsPage /> : <LoginPage />} />
+        <Route path="/user/:userId" element={isAuthenticated ? <PublicProfilePage /> : <LoginPage />} />
+
+
+        {/*Admin Routes (Nested) */}
+        <Route path="/admin" element={
+          <AdminGuard>
+            <AdminLayout />
+          </AdminGuard>
+        }>
+    
+            <Route index element={<AdminDashboard />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="problems" element={<ProblemList />} />
+            <Route path="users" element={<UsersList />} />
+            <Route path="problem/create" element={<ProblemForm />} />
+            <Route path="problem/edit/:id" element={<ProblemForm />} />   
+        </Route>
+
+        {/* Catch All */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
 }
 
 export default App;
+
