@@ -1,13 +1,15 @@
-import React from 'react';
 import { Settings, RefreshCw, Play, CloudUpload, ChevronDown } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveLanguage, setEditorFontSize, setEditorTheme } from '../../redux/slices/workspaceSlice';
+import { useEffect, useMemo } from 'react';
 
 const EditorHeader = ({ onRun, onSubmit, onReset, isRunning, isSubmitting }) => {
     const dispatch = useDispatch();
-    const { activeLanguage, editorPreferences } = useSelector((state) => state.workspace);
+    
+    // 1. Get currentProblem from Redux
+    const { activeLanguage, editorPreferences, currentProblem } = useSelector((state) => state.workspace);
 
-    const languages = [
+    const allLanguages = [
         { id: 'javascript', label: 'JavaScript' },
         { id: 'cpp', label: 'C++' },
         { id: 'java', label: 'Java' },
@@ -18,6 +20,29 @@ const EditorHeader = ({ onRun, onSubmit, onReset, isRunning, isSubmitting }) => 
         { id: 'vs-dark', label: 'Dark' },
         { id: 'light', label: 'Light' },
     ];
+
+    // 2. Filter languages based on currentProblem.startCode
+    const supportedLanguages = useMemo(() => {
+        if (!currentProblem || !currentProblem.startCode) return allLanguages;
+
+        // Extract languages available in the DB
+        const availableDbLangs = currentProblem.startCode.map(sc => 
+            sc.language === 'c++' ? 'cpp' : sc.language.toLowerCase()
+        );
+
+        // Filter the frontend list
+        return allLanguages.filter(lang => availableDbLangs.includes(lang.id));
+    }, [currentProblem]);
+
+    // 3. Safety Check: If active language is not supported, switch to the first supported one
+    useEffect(() => {
+        if (supportedLanguages.length > 0) {
+            const isSupported = supportedLanguages.some(lang => lang.id === activeLanguage);
+            if (!isSupported) {
+                dispatch(setActiveLanguage(supportedLanguages[0].id));
+            }
+        }
+    }, [supportedLanguages, activeLanguage, dispatch]);
 
     const handleFontSizeChange = (e) => {
         const size = parseInt(e.target.value);
@@ -37,7 +62,8 @@ const EditorHeader = ({ onRun, onSubmit, onReset, isRunning, isSubmitting }) => 
                         value={activeLanguage}
                         onChange={(e) => dispatch(setActiveLanguage(e.target.value))}
                     >
-                        {languages.map(lang => (
+                        {/* 4. Map over supportedLanguages */}
+                        {supportedLanguages.map(lang => (
                             <option key={lang.id} value={lang.id}>{lang.label}</option>
                         ))}
                     </select>

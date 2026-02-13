@@ -58,7 +58,7 @@ JSON RESPONSE FORMAT:
       const jsonString = responseText.slice(firstBrace, lastBrace + 1);
       parsedResponse = JSON.parse(jsonString);
     } catch (e) {
-      console.error("JSON Parse Error:", responseText);
+      // console.error("JSON Parse Error:", responseText);
       return res.status(502).json({
         success: false,
         message: "AI returned invalid JSON",

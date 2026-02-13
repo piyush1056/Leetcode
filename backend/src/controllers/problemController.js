@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
-const {  submitBatch, submitToken, createSubmissionPayload, mapJudge0Status } = require('../utils/judge0Helper');
+const {  submitBatch, submitToken, createSubmissionPayload, mapJudge0Status,buildFullSourceCodeForValidation } = require('../utils/judge0Helper');
 const Problem = require('../models/problem');
 const User = require('../models/user');
 const Submission = require('../models/submission');
 const SolutionVideo = require('../models/solutionVideo');
 
 
-const validateReferenceSolutions = async (referenceSolution, visibleTestCases) => {
+const validateReferenceSolutions = async (startCode, referenceSolution, visibleTestCases) => {
 
     if (!Array.isArray(visibleTestCases) || visibleTestCases.length === 0) {
         throw new Error('visibleTestCases must be a non-empty array');
@@ -15,30 +15,51 @@ const validateReferenceSolutions = async (referenceSolution, visibleTestCases) =
     if (!Array.isArray(referenceSolution) || referenceSolution.length === 0) {
         throw new Error('referenceSolution must be a non-empty array');
     }
-
+    
     for (const { language, completeCode } of referenceSolution) {
-        const submissions = visibleTestCases.map(testCase =>
-            createSubmissionPayload({
-                code: completeCode,
+        
+        // Prepare batch
+        // const submissions = visibleTestCases.map(testCase =>
+        //     createSubmissionPayload({
+        //         code: buildFullSourceCodeForValidation({ startCode, language, userCode: completeCode }),
+        //         language,
+        //         testCase
+        //     })
+        // );
+
+         //-------- Validate only first visible test case (to reduce API usage)------//
+        const testCase = visibleTestCases[0];
+
+        const submissions = [createSubmissionPayload(
+            {
+                code: buildFullSourceCodeForValidation({ startCode, language, userCode: completeCode }),
                 language,
                 testCase
-            })
-        );
+            }
+        )];
 
         const submitResult = await submitBatch(submissions);
         const tokens = submitResult.map(s => s.token);
-
         const testResults = await submitToken(tokens);
 
+  
         for (const test of testResults) {
             const finalStatus = mapJudge0Status(test.status.id);
+            
             if (finalStatus !== 'accepted') {
-                throw new Error(`Reference solution failed: ${finalStatus}`);
+                //Capture the actual error details 
+                let errorDetails = '';
+                if (finalStatus === 'wrong') {
+                    errorDetails = `\nInput: ${test.stdin}\nExpected: ${test.expected_output}\nGot: ${test.stdout}`;
+                } else if (finalStatus === 'error' || finalStatus === 'runtime-error') {
+                    errorDetails = `\nError: ${test.compile_output || test.stderr}`;
+                }
+
+                throw new Error(`Reference solution failed for ${language} (${finalStatus}): ${errorDetails}`);
             }
         }
     }
 };
-
 
 const createProblem = async (req, res) => {
     try {
@@ -79,7 +100,7 @@ const createProblem = async (req, res) => {
             return res.status(400).json({ message: 'problemNo must be a positive number' });
         }
 
-        await validateReferenceSolutions(referenceSolution, visibleTestCases);
+        await validateReferenceSolutions(startCode,referenceSolution, visibleTestCases);
 
         const createdProblem = await Problem.create({
             title, description, difficulty, tags, visibleTestCases,
