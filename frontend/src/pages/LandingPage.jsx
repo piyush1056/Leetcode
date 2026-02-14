@@ -247,9 +247,9 @@ const LandingPage = () => {
 
                {/* SOCIAL LINKS (Contact Section) */}
                <div className="flex gap-4">
-                  <a href="https://github.com/piyush1056" target="_blank" rel="noreferrer" className="btn btn-circle btn-sm btn-ghost hover:bg-base-200 hover:text-black transition-colors" aria-label="GitHub">
+                  {/* <a href="https://github.com/piyush1056" target="_blank" rel="noreferrer" className="btn btn-circle btn-sm btn-ghost hover:bg-base-200 hover:text-black transition-colors" aria-label="GitHub">
                      <Github size={18} />
-                  </a>
+                  </a> */}
                   <a href="https://www.linkedin.com/in/piyush-raj-4338bb263/" target="_blank" rel="noreferrer" className="btn btn-circle btn-sm btn-ghost hover:bg-base-200 hover:text-blue-700 transition-colors" aria-label="LinkedIn">
                      <Linkedin size={18} />
                   </a>
